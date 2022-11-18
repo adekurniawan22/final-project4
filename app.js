@@ -14,4 +14,6 @@ app.use(photoRouter);
 app.use(commentRouter);
 app.use(socialmediaRouter);
 
-app.listen(PORT, () => { console.log(`Server running on PORT ${PORT}`) });
+// app.listen(PORT, () => { console.log(`Server running on PORT ${PORT}`) });
+
+module.exports = app;

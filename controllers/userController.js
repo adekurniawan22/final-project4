@@ -49,7 +49,7 @@ class userController {
             error.errors.map(error => {
                 errObj[error.path] = error.message;
             })
-            return res.status(500).json(errObj);
+            return res.status(500).json({ message: errObj });
         }
     }
 

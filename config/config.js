@@ -8,11 +8,11 @@ module.exports = {
     "dialect": process.env.PGUSER
   },
   "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "username": process.env.PGUSER,
+    "password": process.env.PGPASSWORD,
+    "database": process.env.PGDATABASE,
+    "host": process.env.PGHOST,
+    "dialect": process.env.PGUSER
   },
   "production": {
     "username": "root",
