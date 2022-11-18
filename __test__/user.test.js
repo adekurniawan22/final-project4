@@ -13,15 +13,6 @@ const registerData = {
     age: 20,
     phone_number: "0851",
 }
-const registerData2 = {
-    email: "user_tes2@gmail.com",
-    full_name: "user tes2",
-    username: "usertes2",
-    password: "usertes2",
-    profile_image_url: "http://user2.com/profile.jpg",
-    age: 20,
-    phone_number: "0851",
-}
 
 const wrongRegisterData = {
     email: "user_tes",
@@ -54,18 +45,7 @@ describe("POST - success /users/register", () => {
                 expect(res.body.user).toHaveProperty("phone_number");
                 expect(typeof res.body.user.age).toBe("number")
                 expect(typeof res.body.user.phone_number).toBe("string");
-
-                // register user2
-                request(app)
-                    .post('/users/register')
-                    .send(registerData2)
-                    .end(function (err, res) {
-                        if (err) {
-                            done(err)
-                        }
-
-                        done()
-                    })
+                done();
             })
 
     })
