@@ -7,7 +7,7 @@ async function authorizationUser(req, res, next) {
             return res.status(401).json({ message: 'Forbidden' })
         }
     } catch (error) {
-        return res.status(200).json(error);
+        return res.status(200).json({ message: error.message });
     }
 }
 

@@ -32,9 +32,9 @@ class commentController {
                         attributes: { exclude: ['createdAt', 'updatedAt', 'full_name', 'email', 'age', 'password'] }
                     }]
             })
-            return res.status(200).json(data)
+            return res.status(200).json({ comments: data })
         } catch (error) {
-            return res.status(500).json(error)
+            return res.status(500).json({ message: error.message })
         }
     }
 
@@ -45,7 +45,7 @@ class commentController {
             const dataUpdate = await Comment.findOne({ where: { id: req.params.commentId } })
             return res.status(200).json({ comment: dataUpdate })
         } catch (error) {
-            return res.status(500).json(error)
+            return res.status(500).json({ message: error.message })
         }
     }
 
@@ -54,7 +54,7 @@ class commentController {
             await Comment.destroy({ where: { id: req.params.commentId } })
             return res.status(200).json({ message: 'Your comment has been succesfully deleted' })
         } catch (error) {
-            return res.status(500).json(error)
+            return res.status(500).json({ message: error.message })
         }
     }
 }

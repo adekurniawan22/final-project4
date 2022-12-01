@@ -10,7 +10,7 @@ async function authorizationPhoto(req, res, next) {
             return res.status(401).json({ message: 'Forbidden' })
         }
     } catch (error) {
-        return res.status(500).json({ message: 'Photo id not found' });
+        return res.status(500).json({ message: error.message });
     }
 }
 

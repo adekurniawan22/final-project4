@@ -47,7 +47,7 @@ class socialmediaController {
             await SocialMedia.destroy({ where: { id: req.params.socialMediaId } })
             return res.status(200).json({ message: 'Your social media has been succesfully deleted' })
         } catch (error) {
-            return res.status(500).json(error)
+            return res.status(500).json({ message: error.message })
         }
     }
 }
