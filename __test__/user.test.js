@@ -80,6 +80,7 @@ describe("Success POST /users/login", () => {
                 if (err) {
                     done(err);
                 }
+                console.log(res.text);
                 expect(res.status).toEqual(200);
                 expect(res.body).toHaveProperty("token");
                 done();
