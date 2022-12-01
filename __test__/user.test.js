@@ -6,12 +6,12 @@ const app = require("../app");
 // REGISTER
 const registerData = {
     full_name: "user tes",
-    email: "user_tes@gmail.com",
+    email: "usertes@gmail.com",
     username: "usertes",
     password: "usertes",
     profile_image_url: "http://user.com/profile.jpg",
     age: 20,
-    phone_number: "0851",
+    phone_number: "085111111111",
 }
 
 const wrongRegisterData = {
@@ -24,8 +24,9 @@ const wrongRegisterData = {
     phone_number: "0851s",
 }
 
-// SUCCESS TEST
-describe("POST - success /users/register", () => {
+
+// Testing Register
+describe("Success POST /users/register", () => {
     it("should send response with 201 status code", (done) => {
         request(app)
             .post('/users/register')
@@ -34,8 +35,6 @@ describe("POST - success /users/register", () => {
                 if (err) {
                     done(err)
                 }
-
-                expect(res.status).toEqual(201);
                 expect(res.body).toHaveProperty("user");
                 expect(res.body.user).toHaveProperty("email");
                 expect(res.body.user).toHaveProperty("full_name");
@@ -43,18 +42,14 @@ describe("POST - success /users/register", () => {
                 expect(res.body.user).toHaveProperty("profile_image_url");
                 expect(res.body.user).toHaveProperty("age");
                 expect(res.body.user).toHaveProperty("phone_number");
-                expect(typeof res.body.user.age).toBe("number")
-                expect(typeof res.body.user.phone_number).toBe("string");
+                expect(res.status).toEqual(201);
                 done();
             })
-
     })
 })
 
-// FAILED TEST
-describe("POST - failed /users/register", () => {
+describe("Failed POST /users/register", () => {
     it("should send response with 201 status code", (done) => {
-
         request(app)
             .post('/users/register')
             .send(wrongRegisterData)
@@ -62,11 +57,20 @@ describe("POST - failed /users/register", () => {
                 if (err) {
                     done(err)
                 }
-
                 expect(res.status).toEqual(500);
                 expect(res.body).toHaveProperty("message");
                 done()
             })
-
     })
 })
+
+afterAll((done) => {
+    sequelize.queryInterface
+        .bulkDelete("Users", {})
+        .then(() => {
+            return done();
+        })
+        .catch((err) => {
+            done(err);
+        });
+});
