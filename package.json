@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "NODE_ENV=test npx jest --detectOpenHandles --forceExit",
+    "test": "NODE_ENV=test npx jest --runInBand --detectOpenHandles --forceExit",
     "db:create:test": "NODE_ENV=test npx sequelize db:create",
     "db:migrate:test": "NODE_ENV=test npx sequelize db:migrate"
   },

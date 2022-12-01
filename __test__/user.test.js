@@ -3,7 +3,7 @@ const { sequelize } = require("../models");
 const request = require("supertest");
 const app = require("../app");
 
-// REGISTER
+// EXAMPLE REGISTER DATA
 const registerData = {
     full_name: "user tes",
     email: "usertes@gmail.com",
@@ -24,10 +24,9 @@ const wrongRegisterData = {
     phone_number: "0851s",
 }
 
-
-// Testing Register
+// TESTING REGISTER
 describe("Success POST /users/register", () => {
-    it("should send response with 201 status code", (done) => {
+    it("Get 8 except success", (done) => {
         request(app)
             .post('/users/register')
             .send(registerData)
@@ -49,7 +48,7 @@ describe("Success POST /users/register", () => {
 })
 
 describe("Failed POST /users/register", () => {
-    it("should send response with 201 status code", (done) => {
+    it("Get 2 except failed", (done) => {
         request(app)
             .post('/users/register')
             .send(wrongRegisterData)
@@ -64,6 +63,47 @@ describe("Failed POST /users/register", () => {
     })
 })
 
+// TESTING LOGIN
+let token = "";
+
+const wrongLoginData = {
+    email: "adsasd",
+    password: "dsasdas",
+};
+
+describe("Success POST /users/login", () => {
+    it("Get 5 except success", (done) => {
+        request(app)
+            .post("/users/login")
+            .send(registerData)
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                }
+                expect(res.status).toEqual(200);
+                expect(res.body).toHaveProperty("token");
+                done();
+            });
+    });
+});
+
+describe("Failed POST /users/login", () => {
+    it("Get 2 except failed", (done) => {
+        request(app)
+            .post("/users/login")
+            .send(wrongLoginData)
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                }
+                expect(res.status).toEqual(500);
+                expect(res.body).toHaveProperty("message");
+                done()
+            });
+    });
+});
+
+// DELETE DATA FROM TABLE USERS
 afterAll((done) => {
     sequelize.queryInterface
         .bulkDelete("Users", {})
