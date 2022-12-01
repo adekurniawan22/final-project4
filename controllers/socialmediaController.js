@@ -10,7 +10,7 @@ class socialmediaController {
 
             return res.status(201).json({ social_media })
         } catch (error) {
-            return res.status(500).json(error)
+            return res.status(500).json({ message: error.message })
         }
     }
 
@@ -25,9 +25,9 @@ class socialmediaController {
                     attributes: ["id", "username", "profile_image_url"]
                 }]
             })
-            return res.status(200).json(data)
+            return res.status(200).json({ social_media: data })
         } catch (error) {
-            return res.status(500).json(error)
+            return res.status(500).json({ message: error.message })
         }
     }
 
@@ -38,7 +38,7 @@ class socialmediaController {
             const dataUpdate = await SocialMedia.findOne({ where: { id: req.params.socialMediaId } })
             return res.status(200).json({ social_media: dataUpdate })
         } catch (error) {
-            return res.status(500).json(error)
+            return res.status(500).json({ message: error.message })
         }
     }
 

@@ -1,4 +1,4 @@
-const { generateToken, verifyToken } = require("../helper/jwt");
+const { verifyToken } = require("../helper/jwt");
 const { sequelize } = require("../models");
 const request = require("supertest");
 const app = require("../app");
@@ -15,17 +15,17 @@ const registerData = {
 }
 
 const wrongRegisterData = {
-    email: "user_tes",
+    email: "",
     full_name: "",
     username: "",
     password: "",
-    profile_image_url: "http://user/profile.jpg",
-    age: '20s',
-    phone_number: "0851s",
+    profile_image_url: "",
+    age: "",
+    phone_number: "",
 }
 
 // TESTING REGISTER
-describe("Success POST /users/register", () => {
+describe("POST /users/register", () => {
     it("Get 8 except success", (done) => {
         request(app)
             .post('/users/register')
@@ -45,9 +45,7 @@ describe("Success POST /users/register", () => {
                 done();
             })
     })
-})
 
-describe("Failed POST /users/register", () => {
     it("Get 2 except failed", (done) => {
         request(app)
             .post('/users/register')
@@ -63,7 +61,6 @@ describe("Failed POST /users/register", () => {
     })
 })
 
-// TESTING LOGIN
 let token = "";
 
 const wrongLoginData = {
@@ -71,7 +68,8 @@ const wrongLoginData = {
     password: "dsasdas",
 };
 
-describe("Success POST /users/login", () => {
+// TESTING LOGIN
+describe("POST /users/login", () => {
     it("Get 5 except success", (done) => {
         request(app)
             .post("/users/login")
@@ -80,15 +78,16 @@ describe("Success POST /users/login", () => {
                 if (err) {
                     done(err);
                 }
-                console.log(res.text);
+                token = res.body.token;
                 expect(res.status).toEqual(200);
                 expect(res.body).toHaveProperty("token");
+                expect(verifyToken(token)).toHaveProperty("id");
+                expect(verifyToken(token)).toHaveProperty("email");
+                expect(verifyToken(token)).toHaveProperty("username");
                 done();
             });
     });
-});
 
-describe("Failed POST /users/login", () => {
     it("Get 2 except failed", (done) => {
         request(app)
             .post("/users/login")
@@ -100,6 +99,91 @@ describe("Failed POST /users/login", () => {
                 expect(res.status).toEqual(500);
                 expect(res.body).toHaveProperty("message");
                 done()
+            });
+    });
+});
+
+const editData = {
+    full_name: "user tes2",
+    email: "usertes2@gmail.com",
+    username: "usertes2",
+    password: "usertes2",
+    profile_image_url: "http://user.com/profile.jpg",
+    age: 20,
+    phone_number: "085111111111",
+}
+
+//TESTING EDIT USER
+describe("PUT /users/:userid", () => {
+    it("Get 8 except success", (done) => {
+        request(app)
+            .put(`/users/${verifyToken(token).id}`)
+            .set("authorization", token)
+            .send(editData)
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                }
+                expect(res.status).toEqual(200);
+                expect(res.body).toHaveProperty("user");
+                expect(res.body.user).toHaveProperty("email");
+                expect(res.body.user).toHaveProperty("full_name");
+                expect(res.body.user).toHaveProperty("username");
+                expect(res.body.user).toHaveProperty("profile_image_url");
+                expect(res.body.user).toHaveProperty("age");
+                expect(res.body.user).toHaveProperty("phone_number");
+                done();
+            });
+    });
+
+    it("Get 2 except failed", (done) => {
+        request(app)
+            .put(`/users/123`)
+            .set("token", token)
+            .send(registerData)
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                }
+                expect(res.status).toEqual(500);
+                expect(res.body).toHaveProperty("message");
+                done();
+            });
+    });
+});
+
+//TESTING DELETE USER
+describe("DELETE /users/:userid", () => {
+    it("Get 5 except success", (done) => {
+        request(app)
+            .delete(`/users/${verifyToken(token).id}`)
+            .set("authorization", token)
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                }
+                expect(res.status).toEqual(200);
+                expect(typeof res.body).toEqual("object");
+                expect(res.body).toHaveProperty("message");
+                expect(typeof res.body.message).toEqual("string");
+                expect(res.body.message).toEqual(
+                    "Your account has been succesfully deleted"
+                );
+                done();
+            });
+    });
+
+    it("Get 2 except failed", (done) => {
+        request(app)
+            .delete(`/users/123`)
+            .set("authorization", token)
+            .end(function (err, res) {
+                if (err) {
+                    done(err);
+                }
+                expect(res.status).toEqual(500);
+                expect(res.body).toHaveProperty("message");
+                done();
             });
     });
 });

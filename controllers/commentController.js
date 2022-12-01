@@ -15,7 +15,7 @@ class commentController {
                 return res.status(404).json({ message: 'Photo id not found' })
             }
         } catch (error) {
-            return res.status(500).json(error);
+            return res.status(500).json({ message: error.message });
         }
     }
 

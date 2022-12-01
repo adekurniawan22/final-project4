@@ -72,6 +72,8 @@ class userController {
                     if (isCorrect) {
                         const token = generateToken({
                             id: dataLogin.id,
+                            email: dataLogin.email,
+                            username: dataLogin.username
                         })
                         return res.status(200).json({ token: token })
                     } else {
@@ -116,7 +118,7 @@ class userController {
 
             return res.status(200).json({ user })
         } catch (error) {
-            return res.status(500).json(error);
+            return res.status(500).json({ message: error.message });
         }
     }
 
@@ -126,7 +128,7 @@ class userController {
             await User.destroy({ where: { id: userId } })
             return res.status(200).json({ message: 'Your account has been succesfully deleted' })
         } catch (error) {
-            return res.status(500).json(error);
+            return res.status(500).json({ message: error.message });
         }
     }
 }

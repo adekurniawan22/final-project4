@@ -19,7 +19,7 @@ class photoController {
             error.errors.map(error => {
                 errObj[error.path] = error.message;
             })
-            return res.status(500).json(errObj);
+            return res.status(500).json({ message: errObj });
         }
     }
 
@@ -39,7 +39,7 @@ class photoController {
             })
             return res.status(200).json(data);
         } catch (error) {
-            return res.status(500).json(error);
+            return res.status(500).json({ message: error.message });
         }
     }
 
